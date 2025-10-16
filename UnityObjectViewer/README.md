@@ -6,14 +6,23 @@ This directory contains guidance and reusable scripts for building an Android 3D
 
 1. **Create a new Unity project** using the 3D (URP or Built-in) template.
 2. Copy the contents of the `Assets` folder from this repository into your project's `Assets` directory. The `TouchObjectController` script will appear under `Assets/Scripts`.
-3. Import or create the 3D model you want to display. Place it in the scene as the child of an empty GameObject (e.g., `ModelRoot`).
-4. Attach the `TouchObjectController` component to the parent GameObject that should respond to gestures (`ModelRoot`).
-5. Assign a camera in the scene. The script uses `Camera.main` to determine rotation axes and pan direction.
-6. Configure the public properties in the Inspector to match the desired feel:
+3. In Unity, create or select an empty GameObject (for example `ModelRoot`) that will act as the parent for the model you want to manipulate.
+4. Drag your 3D model under `ModelRoot` so the entire object moves together when the parent is transformed.
+5. With `ModelRoot` selected, click **Add Component** in the Inspector and choose **Scripts ▸ Touch Object Controller** (or search for `TouchObjectController`).
+6. Assign a camera in the scene. The script automatically uses `Camera.main`, so ensure the camera you want to reference has the **Main Camera** tag.
+7. Configure the public properties in the Inspector to match the desired feel:
    - **Rotation Speed**: How fast the model rotates when dragging with one finger.
    - **Zoom Speed**: How responsive the pinch gesture is.
    - **Min/Max Scale Multipliers**: Clamp the scale relative to the object's starting scale.
    - **Pan Speed**: Controls how far the object moves in world space during a two-finger pan.
+
+### Applying the controller script in Unity
+
+1. After copying the files, return to the Unity Editor. Unity will automatically compile `TouchObjectController.cs`.
+2. In the **Project** window, confirm the script appears under `Assets/Scripts`. If it is missing, right-click the folder and choose **Reimport**.
+3. Select the GameObject that should react to touches (for example `ModelRoot`).
+4. In the **Inspector**, click **Add Component** → search for `TouchObjectController` → select it. The component now controls the object's rotation, zoom, and pan on Android builds.
+5. Enter **Play Mode** or build to a device to test. Drag with one finger to rotate, pinch to zoom, and drag with two fingers to pan.
 
 ## Android build settings
 
