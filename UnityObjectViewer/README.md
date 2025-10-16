@@ -1,50 +1,49 @@
-# Unity Android 3D Object Viewer
+# 유니티 안드로이드 3D 오브젝트 뷰어
 
-This directory contains guidance and reusable scripts for building an Android 3D object viewer in Unity that supports touch-based rotation, zoom and panning.
+이 디렉터리는 안드로이드용 3D 오브젝트 뷰어를 구현할 때 사용할 수 있는 `TouchObjectController` 스크립트와 설정 방법을 제공합니다. 멀티 터치 제스처로 모델을 회전, 확대/축소, 이동할 수 있습니다.
 
-## Getting started
+## 시작하기
 
-1. **Create a new Unity project** using the 3D (URP or Built-in) template.
-2. Copy the contents of the `Assets` folder from this repository into your project's `Assets` directory. The `TouchObjectController` script will appear under `Assets/Scripts`.
-3. In Unity, create or select an empty GameObject (for example `ModelRoot`) that will act as the parent for the model you want to manipulate.
-4. Drag your 3D model under `ModelRoot` so the entire object moves together when the parent is transformed.
-5. With `ModelRoot` selected, click **Add Component** in the Inspector and choose **Scripts ▸ Touch Object Controller** (or search for `TouchObjectController`).
-6. Assign a camera in the scene. The script automatically uses `Camera.main`, so ensure the camera you want to reference has the **Main Camera** tag.
-7. Configure the public properties in the Inspector to match the desired feel:
-   - **Rotation Speed**: How fast the model rotates when dragging with one finger.
-   - **Zoom Speed**: How responsive the pinch gesture is.
-   - **Min/Max Scale Multipliers**: Clamp the scale relative to the object's starting scale.
-   - **Pan Speed**: Controls how far the object moves in world space during a two-finger pan.
+1. **새 Unity 프로젝트 생성**: 3D(URP 또는 Built-in) 템플릿으로 프로젝트를 생성합니다.
+2. 이 저장소의 `Assets` 폴더를 프로젝트의 `Assets` 디렉터리에 복사합니다. `TouchObjectController` 스크립트는 `Assets/Scripts` 경로에 나타납니다.
+3. 씬에서 모델을 담을 빈 게임 오브젝트(예: `ModelRoot`)를 만들거나 선택합니다.
+4. 조작할 3D 모델을 `ModelRoot` 하위로 옮겨 부모 오브젝트와 함께 이동하도록 구성합니다.
+5. `ModelRoot`를 선택한 상태에서 인스펙터의 **Add Component** 버튼을 눌러 **Scripts ▸ Touch Object Controller**(또는 검색) 컴포넌트를 추가합니다.
+6. 장면에 사용할 카메라를 지정합니다. 스크립트는 `Camera.main`을 기본으로 사용하므로, 대상 카메라에 **Main Camera** 태그가 지정되어 있는지 확인합니다.
+7. 인스펙터에서 공개 변수 값을 조정하여 제스처 감도를 원하는 대로 맞춥니다.
+   - **회전 속도(Rotation Speed)**: 한 손가락 드래그 시 회전 반응 속도.
+   - **확대/축소 속도(Zoom Speed)**: 핀치 제스처 시 반응 속도.
+   - **최소/최대 배율(Min/Max Scale Multipliers)**: 시작 크기를 기준으로 허용되는 배율 범위.
+   - **이동 속도(Pan Speed)**: 두 손가락 드래그 시 이동 속도.
 
-### Applying the controller script in Unity
+## 유니티에서 스크립트 적용하기
 
-1. After copying the files, return to the Unity Editor. Unity will automatically compile `TouchObjectController.cs`.
-2. In the **Project** window, confirm the script appears under `Assets/Scripts`. If it is missing, right-click the folder and choose **Reimport**.
-3. Select the GameObject that should react to touches (for example `ModelRoot`).
-4. In the **Inspector**, click **Add Component** → search for `TouchObjectController` → select it. The component now controls the object's rotation, zoom, and pan on Android builds.
-5. Enter **Play Mode** or build to a device to test. Drag with one finger to rotate, pinch to zoom, and drag with two fingers to pan.
+1. 파일을 복사한 뒤 Unity 에디터로 돌아오면 `TouchObjectController.cs`가 자동으로 컴파일됩니다.
+2. **Project** 창에서 스크립트가 `Assets/Scripts`에 존재하는지 확인합니다. 보이지 않으면 해당 폴더를 우클릭하여 **Reimport**를 실행합니다.
+3. 제스처에 반응할 게임 오브젝트(`ModelRoot`)를 선택합니다.
+4. **Inspector**에서 **Add Component** → `TouchObjectController`를 검색 후 추가합니다. 이제 이 컴포넌트가 회전, 확대/축소, 이동을 모두 제어합니다.
+5. **Play Mode**로 실행하거나 실제 기기에 빌드하여 제스처 동작을 테스트합니다. 한 손가락 드래그로 회전하고, 핀치로 확대/축소하며, 두 손가락 드래그로 이동할 수 있습니다.
 
-## Android build settings
+## 안드로이드 빌드 설정
 
-1. Install the **Android Build Support** (SDK & NDK Tools) using the Unity Hub.
-2. Open **File ▸ Build Settings**, switch the target platform to **Android**, and click **Switch Platform**.
-3. In **Player Settings ▸ Other Settings**, ensure the following:
-   - `Auto Graphics API` is enabled (or manually select OpenGLES3 / Vulkan).
-   - `Scripting Backend` set to IL2CPP for release builds.
-   - `Target Architectures` include ARM64.
-4. Optionally disable `Multithreaded Rendering` on low-end devices if you experience artifacts when panning.
-5. Set your package name (e.g., `com.example.objectviewer`) and keystore for signing.
-6. Click **Build** or **Build And Run** to deploy to a connected Android device.
+1. Unity Hub에서 **Android Build Support**(SDK & NDK 포함)를 설치합니다.
+2. **File ▸ Build Settings**에서 플랫폼을 **Android**로 전환하고 **Switch Platform**을 클릭합니다.
+3. **Player Settings ▸ Other Settings**에서 다음을 확인합니다.
+   - `Auto Graphics API`를 활성화하거나 OpenGLES3 / Vulkan을 수동으로 선택합니다.
+   - `Scripting Backend`를 배포용으로 IL2CPP로 설정합니다.
+   - `Target Architectures`에 ARM64를 포함합니다.
+4. 저사양 기기에서 이동 시 끊김이 있다면 `Multithreaded Rendering`을 비활성화해 볼 수 있습니다.
+5. 패키지 이름(예: `com.example.objectviewer`)과 서명용 키스토어를 설정합니다.
+6. **Build** 또는 **Build And Run**을 눌러 연결된 안드로이드 기기에 배포합니다.
 
-## Gesture behavior
+## 제스처 동작 요약
 
-- **Single-finger drag** rotates the model around the global Y-axis and relative camera X-axis.
-- **Two-finger pinch** scales the model uniformly, clamped between configurable min/max multipliers.
-- **Two-finger pan** moves the model in world space along the camera's right and up vectors, allowing the user to reposition the object.
+- **한 손가락 드래그**: 글로벌 Y축과 카메라 기준 X축을 따라 모델을 회전합니다.
+- **두 손가락 핀치**: 오브젝트를 균일하게 확대/축소하며 지정한 최소/최대 배율 사이로 제한합니다.
+- **두 손가락 드래그**: 카메라의 오른쪽/위쪽 벡터를 기준으로 오브젝트를 이동합니다.
 
-## Tips
+## 팁
 
-- Place colliders or UI boundaries in the scene if you need to restrict how far the model can move.
-- Combine this script with a stationary camera or additional camera orbit controls for alternative viewpoints.
-- Use the Unity **Device Simulator** package to preview gestures within the editor.
-
+- 이동 범위를 제한하고 싶다면 콜라이더나 UI 영역을 배치해 사용자의 이동을 제약하세요.
+- 고정된 카메라 연출이 필요하다면 다른 카메라 제어 스크립트와 조합해 사용할 수 있습니다.
+- Unity **Device Simulator** 패키지를 사용하면 에디터에서 기본적인 터치 제스처를 미리 확인할 수 있습니다.

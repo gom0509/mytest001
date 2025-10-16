@@ -1,25 +1,25 @@
 using UnityEngine;
 
 /// <summary>
-/// Provides touch-based rotation, zoom and pan controls for an object on Android.
-/// Attach this component to the root object that should respond to gestures.
+/// 안드로이드에서 터치 제스처로 3D 오브젝트를 회전, 확대/축소, 이동할 수 있도록 제어합니다.
+/// 제스처에 반응할 루트 오브젝트에 이 컴포넌트를 추가하세요.
 /// </summary>
 public class TouchObjectController : MonoBehaviour
 {
-    [Header("Rotation")]
-    [Tooltip("Multiplier applied to drag distance when rotating the object.")]
+    [Header("회전")]
+    [Tooltip("한 손가락 드래그 시 회전 속도에 곱해지는 계수입니다.")]
     public float rotationSpeed = 0.4f;
 
-    [Header("Zoom")]
-    [Tooltip("Speed at which the object scales when pinching.")]
+    [Header("확대/축소")]
+    [Tooltip("핀치 제스처 시 오브젝트 크기가 변하는 속도입니다.")]
     public float zoomSpeed = 0.005f;
-    [Tooltip("Minimum scale multiplier relative to the starting scale.")]
+    [Tooltip("시작 크기를 기준으로 허용되는 최소 배율입니다.")]
     public float minScaleMultiplier = 0.2f;
-    [Tooltip("Maximum scale multiplier relative to the starting scale.")]
+    [Tooltip("시작 크기를 기준으로 허용되는 최대 배율입니다.")]
     public float maxScaleMultiplier = 3f;
 
-    [Header("Pan")]
-    [Tooltip("Speed at which the object moves when panning with two fingers.")]
+    [Header("이동")]
+    [Tooltip("두 손가락으로 드래그할 때 오브젝트가 이동하는 속도입니다.")]
     public float panSpeed = 0.0025f;
 
     private Vector3 _initialScale;
@@ -68,7 +68,7 @@ public class TouchObjectController : MonoBehaviour
 
     private void HandlePinchAndPan(Touch touch0, Touch touch1)
     {
-        // Zoom
+        // 확대/축소 처리
         Vector2 prevTouch0 = touch0.position - touch0.deltaPosition;
         Vector2 prevTouch1 = touch1.position - touch1.deltaPosition;
         float prevMagnitude = (prevTouch0 - prevTouch1).magnitude;
@@ -81,7 +81,7 @@ public class TouchObjectController : MonoBehaviour
         float clampedMultiplier = Mathf.Clamp(targetMultiplier, minScaleMultiplier, maxScaleMultiplier);
         transform.localScale = _initialScale * clampedMultiplier;
 
-        // Pan
+        // 이동 처리
         Vector2 averageDelta = (touch0.deltaPosition + touch1.deltaPosition) * 0.5f;
         Transform referenceTransform = GetReferenceTransform();
         Vector3 right = referenceTransform != null ? referenceTransform.right : Vector3.right;
