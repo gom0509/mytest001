@@ -24,11 +24,13 @@ public class TouchObjectController : MonoBehaviour
 
     private Vector3 _initialScale;
     private Camera _mainCamera;
+    private Vector3 _pivotLocalOffset;
 
     private void Awake()
     {
         _initialScale = transform.localScale;
         _mainCamera = Camera.main;
+        _pivotLocalOffset = CalculatePivotOffset();
     }
 
     private void Update()
@@ -61,9 +63,10 @@ public class TouchObjectController : MonoBehaviour
 
         Transform referenceTransform = GetReferenceTransform();
         Vector3 xAxis = referenceTransform != null ? referenceTransform.right : Vector3.right;
+        Vector3 pivot = GetCurrentPivotPosition();
 
-        transform.Rotate(xAxis, rotationX, Space.World);
-        transform.Rotate(Vector3.up, rotationY, Space.World);
+        transform.RotateAround(pivot, xAxis, rotationX);
+        transform.RotateAround(pivot, Vector3.up, rotationY);
     }
 
     private void HandlePinchAndPan(Touch touch0, Touch touch1)
@@ -98,5 +101,28 @@ public class TouchObjectController : MonoBehaviour
         }
 
         return _mainCamera != null ? _mainCamera.transform : null;
+    }
+
+    private Vector3 CalculatePivotOffset()
+    {
+        Renderer[] renderers = GetComponentsInChildren<Renderer>();
+        if (renderers.Length == 0)
+        {
+            return Vector3.zero;
+        }
+
+        Bounds combinedBounds = renderers[0].bounds;
+        for (int i = 1; i < renderers.Length; i++)
+        {
+            combinedBounds.Encapsulate(renderers[i].bounds);
+        }
+
+        Vector3 worldCenter = combinedBounds.center;
+        return transform.InverseTransformPoint(worldCenter);
+    }
+
+    private Vector3 GetCurrentPivotPosition()
+    {
+        return transform.TransformPoint(_pivotLocalOffset);
     }
 }
